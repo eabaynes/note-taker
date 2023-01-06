@@ -1,29 +1,35 @@
 const express = require('express');
-const cors = require('cors')
+const cors = require('cors');
 const path = require('path');
-
+const notesData= require('./db/db.json');
+const uuid= require('./public/assets/js/uuid')
 const app = express();
 const PORT = 3001;
 
 app.use(express.static('public'));
 
 // homepage route
-app.get('/', (req, res) =>
-    res.sendFile(path.join(__dirname, 'public/index.html'))
+app.get('/', (req, res) => { 
+    res.sendFile(path.join(__dirname, 'public/index.html'))}
 );
 
 // notes route
-app.get('/notes', (req,res) =>
-    res.sendFile(path.join(__dirname, 'public/notes.html')))
+app.get('/notes', (req,res) => {
+    res.sendFile(path.join(__dirname, 'public/notes.html'))}
+);
+
+// route to retrieve saved notes
+app.get('/api/notes', (req,res) => res.json(notesData))
+
 
 app.listen(PORT, () => console.log(`App listening on port ${PORT}`));
 
 
-// GIVEN a note-taking application
-// WHEN I open the Note Taker
-// THEN I am presented with a landing page with a link to a notes page
-// WHEN I click on the link to the notes page
-// THEN I am presented with a page with existing notes listed in the left-hand column, plus empty fields to enter a new note title and the note’s text in the right-hand column
+// todo: post request handler. send data to db.json with fs?
+
+
+// todo: delete request handler. grab note title, check id, remove from db.json (with fs?)
+
 // WHEN I enter a new note title and the note’s text
 // THEN a Save icon appears in the navigation at the top of the page
 // WHEN I click on the Save icon
