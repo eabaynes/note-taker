@@ -1,10 +1,18 @@
+//bring in necessary dependencies
 const express = require('express');
-const cors = require('cors');
 const path = require('path');
 const notesData= require('./db/db.json');
 const uuid= require('./public/assets/js/uuid')
+const fs = require('fs')
+// create app as an instance of express
 const app = express();
+// notesjson reads the db.json file
+const notesjson = fs.readFileSync("./db/db.json", "utf-8")
+// convert notesjson to a javascript array
+const notes = Array.from(JSON.parse(notesjson))
+// declares the port to be used
 const PORT = 3001;
+
 
 app.use(express.static('public'));
 
@@ -26,6 +34,24 @@ app.listen(PORT, () => console.log(`App listening on port ${PORT}`));
 
 
 // todo: post request handler. send data to db.json with fs?
+app.post('/api/notes', (req, res) => {
+    console.info(`${req.method} request was recieved`);
+
+    let response;
+
+    if (req.body) {
+        response= {
+            status: "sucess",
+            data: req.body, 
+        }
+        res.json(`Note added`)
+    } else {
+        res.json(`Note must contain at least one character`)
+    }
+
+    console.log(JSON.parse(req.body));
+})
+
 
 
 // todo: delete request handler. grab note title, check id, remove from db.json (with fs?)
