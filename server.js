@@ -36,20 +36,12 @@ app.listen(PORT, () => console.log(`App listening on port ${PORT}`));
 // todo: post request handler. send data to db.json with fs?
 app.post('/api/notes', (req, res) => {
     console.info(`${req.method} request was recieved`);
-
-    let response;
-
-    if (req.body) {
-        response= {
-            status: "sucess",
-            data: req.body, 
-        }
-        res.json(`Note added`)
-    } else {
-        res.json(`Note must contain at least one character`)
+    const currentNewNote = {
+        ...req.body,
+        id: uuid(),
     }
-
-    console.log(JSON.parse(req.body));
+    console.log(currentNewNote)
+    res.json("done")
 })
 
 
