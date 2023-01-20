@@ -11,8 +11,7 @@ const app = express();
 let notesjson = fs.readFileSync("./db/db.json", "utf-8")
 // convert notesjson to a javascript array
 const notes = Array.from(JSON.parse(notesjson))
-// declares the port to be used
-const PORT = process.env.port || 3001;
+
 
 app.use(express.json());
 app.use(express.static('public'));
@@ -63,4 +62,6 @@ app.post('/api/notes', (req, res) => {
     }
 });
 
-app.listen(PORT, () => console.log(`App listening on port ${PORT}`));
+app.listen(process.env.PORT || 5000)
+
+console.log(`App listening on port ${PORT}`);
