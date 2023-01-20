@@ -12,7 +12,7 @@ let notesjson = fs.readFileSync("./db/db.json", "utf-8")
 // convert notesjson to a javascript array
 const notes = Array.from(JSON.parse(notesjson))
 // declares the port to be used
-const PORT = 3001;
+const PORT = process.env.port || 3001;
 
 app.use(express.json());
 app.use(express.static('public'));
@@ -32,37 +32,35 @@ app.get('/api/notes', (req,res) => res.json(notesData))
 
 
 
-// todo: post request handler. send data to db.json with fs?
+// route to save a new note
 app.post('/api/notes', (req, res) => {
     console.info(`${req.method} request received`)
-
+    // destructure the title and text from the request body
     const { title, text } = req.body
-
+    // if both are present
     if (title && text) {
         const currentNewNote = {
             title,
             text,
             id: uuid()
         };
-
+        // log the currentNewNote
         const response = {
             status: 'success',
             body: currentNewNote,
         };
-
+        // push the currentNewNote to the notes array
         notes.push(currentNewNote);
-
+        // convert the notes array to a string and write it to the db.json file
         notesjson = (JSON.stringify(notes));
-        
+        // write the notesjson to the db.json file
         fs.writeFileSync("./db/db.json", notesjson, "utf-8");
-        
+        // send the response
         res.status(201).json(response);
     } else {
+        // if the title or text are not present, send an error
         res.status(500).json("error")
     }
 });
 
 app.listen(PORT, () => console.log(`App listening on port ${PORT}`));
-
-
-// todo: delete request handler. grab note title, check id, remove from db.json (with fs?)
