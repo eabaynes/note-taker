@@ -63,5 +63,3 @@ app.post('/api/notes', (req, res) => {
 });
 
 app.listen(process.env.PORT || 5000)
-
-console.log(`App listening on port ${PORT}`);
